@@ -3,7 +3,7 @@ from pylab import *
 import numpy
 
 
-GetNames= lambda y: ['CSV/%04d.CSV' % ((y-1)*8+i) for i in range(1,8)]
+GetNames= lambda y: ['/home/hduser/FlowCAP-II/Data/AML/CSV/%04d.CSV' % ((y-1)*8+i) for i in range(1,8)]
 ConR= lambda y: [log10(float(y[0])),float(y[1])]+[float(i) for i in y[2:]]
 ReadF= lambda y: [ConR(i) for i in [row for row in csv.reader(open(y,'rb'))][1:]]
 
@@ -20,15 +20,17 @@ def doSomething(xx, hh):
 		H[i], edges[i] = histogramdd(a[:,iex[i]], bins=ibin[i])
 	return [H[i]+hh[i] for i in range(ll)]
 
-Tset=[row for row in csv.reader(open('DREAM6_AML_TrainingSet.csv','rb'))]
+Tset=[row for row in csv.reader(open('/home/hduser/FlowCAP-II/Data/AML/DREAM6_AML_TrainingSet.csv','rb'))]
 
-AMLTs=[int(i[0]) for i in Tset if i[1]=='AML']
-NormalTs=[int(i[0]) for i in Tset if i[1]=='Normal']
-
+AMLTs=sort(list(set([int(i[2]) for i in Tset if i[3]=='aml'])))
+NormalTs=sort(list(set([int(i[2]) for i in Tset if i[3]=='normal'])))
+Test = sort(list(set(([int(i[2]) for i in Tset if i[3]=='NA']))))
+print len(Tset)-1, len(NormalTs) + len(AMLTs) + len(Test)
 
 rr=range(7)
 
 H=[[zeros([len(i)-1 for i in ibin[k]]) for k in range(ll) ] for j in rr]
+
 for j in AMLTs[:]:
 	for i in rr: 
 		print j
